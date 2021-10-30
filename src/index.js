@@ -46,7 +46,7 @@ server.get('/metric/:key/sum', (req, res) => {
 server.post('/metric/:key', (req, res) => {
     const key = req.params.key;
     if(!key){
-        res.status(500).send('Missing key');
+        res.status(400).send('Missing key');
         return;
     }
     const now = new Date().getTime();
