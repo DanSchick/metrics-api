@@ -8,14 +8,14 @@ describe('API', () => {
             const res = await supertest(app).post('/metric/randomkey123').expect(200);
             expect(res.body).toEqual({});
         });
-    })
+    });
     describe('When it receives a get that has no data', () => {
         it('responds with a 400', async () => {
             const res = await supertest(app).get('/metric/foobar/sum').expect(400);
             expect(res.body).toEqual({});
-        })
+        });
 
-    })
+    });
     describe('When it recieves a valid post, and then a valid get request', () => {
         it('sends back the correct metric sum', async () => {
             const json = {
@@ -37,11 +37,11 @@ describe('API', () => {
             const date = new Date();
             date.setHours(date.getHours() - 2);
             expect(isOverAnHourAgo(date)).toBe(true);
-        })
+        });
         it('returns false if the date is less than an hour ago', () => {
             const date = new Date();
             date.setHours(date.getHours() - 1);
             expect(isOverAnHourAgo(date)).toBe(false);
-        })
-    })
+        });
+    });
 });
