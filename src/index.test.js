@@ -41,6 +41,7 @@ describe('API', () => {
         it('returns false if the date is less than an hour ago', () => {
             const date = new Date();
             date.setHours(date.getHours() - 1);
+            date.setMinutes(date.getMinutes - 3);
             expect(isOverAnHourAgo(date)).toBe(false);
         });
     });
