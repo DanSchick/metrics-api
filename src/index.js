@@ -4,7 +4,7 @@ const server = express();
 server.use(express.json());
 
 const port = process.env.PORT || 3000;
-const data = {}
+const data = {};
 
 export const isOverAnHourAgo = (timestamp) => {
     const now = new Date().getTime();
@@ -13,8 +13,7 @@ export const isOverAnHourAgo = (timestamp) => {
         return true;
     }
     return false;
-}
-
+};
 
 server.get('/metric/:key/sum', (req, res) => {
     const key = req.params.key;
@@ -23,21 +22,23 @@ server.get('/metric/:key/sum', (req, res) => {
         return;
     }
     const values = data[key].values;
-    const filtered = values.filter(v => !isOverAnHourAgo(v.time));
+    const filtered = values.filter((v) => !isOverAnHourAgo(v.time));
 
     let sum = 0;
-    filtered.forEach(obj => {
+    filtered.forEach((obj) => {
         const { value } = obj;
         if (value) {
             sum += value;
         }
-
-    })
+    });
     data[key].values = filtered;
 
     const response = {
-        value: sum
-    }
+        value: sum,
+    };
+    console.log(
+        `recieved valid get request for key ${key}, sending back value ${sum}`
+    );
     res.send(JSON.stringify(response));
     return;
 });
@@ -51,13 +52,12 @@ server.post('/metric/:key', (req, res) => {
     const now = new Date().getTime();
 
     if (!data[key] || !data[key].values) {
-        data[key] = { values: [] }
+        data[key] = { values: [] };
     }
+    console.log(`recieved valid post for key ${key}, value: ${req.body.value}`);
     data[key].values.push({ value: req.body.value, time: now });
-    console.log(data);
     res.send('{}');
-})
-
+});
 
 server.listen(port);
 console.log(`listening on port ${port}`);
