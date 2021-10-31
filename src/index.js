@@ -7,19 +7,18 @@ const port = process.env.PORT || 3000;
 const data = {}
 
 export const isOverAnHourAgo = (timestamp) => {
-    const now = new Date().getTime()
-    const hour
-    = 1000 * 60 * 60;
-    if(now - timestamp > hour) {
-        return true
-    } 
-    return false
+    const now = new Date().getTime();
+    const hour = 1000 * 60 * 60;
+    if (now - timestamp > hour) {
+        return true;
+    }
+    return false;
 }
 
 
 server.get('/metric/:key/sum', (req, res) => {
-    const key = req.params.key
-    if(!data[key] || !data[key].values){
+    const key = req.params.key;
+    if (!data[key] || !data[key].values) {
         res.status(400).send('{}');
         return;
     }
@@ -29,7 +28,7 @@ server.get('/metric/:key/sum', (req, res) => {
     let sum = 0;
     filtered.forEach(obj => {
         const { value } = obj;
-        if(value){
+        if (value) {
             sum += value;
         }
 
@@ -45,16 +44,16 @@ server.get('/metric/:key/sum', (req, res) => {
 
 server.post('/metric/:key', (req, res) => {
     const key = req.params.key;
-    if(!key){
+    if (!key) {
         res.status(400).send('Missing key');
         return;
     }
     const now = new Date().getTime();
 
-    if(!data[key] || !data[key].values){
-        data[key] = {values: []}
+    if (!data[key] || !data[key].values) {
+        data[key] = { values: [] }
     }
-    data[key].values.push({value: req.body.value, time: now});
+    data[key].values.push({ value: req.body.value, time: now });
     console.log(data);
     res.send('{}');
 })
